@@ -1,0 +1,23 @@
+# Local API against Neon: set DATABASE_URL in backend/.env (postgresql+asyncpg://...)
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - backend/.env
+    environment:
+      PORT: "8000"
+    # Optional: uncomment for fully local Postgres instead of Neon
+    # depends_on:
+    #   - postgres
+  # postgres:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: dashflow
+  #   ports:
+  #     - "5432:5432"

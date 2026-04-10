@@ -1,0 +1,13 @@
+---
+description: DashFlow FastAPI backend conventions
+globs: backend/**/*.py
+alwaysApply: false
+---
+
+# Backend
+
+- Stack: FastAPI, SQLAlchemy 2 async, Alembic, `uv`. Layout: `app/api` → `app/services` → `app/repositories` → `app/models`; Pydantic in `app/schemas`.
+- **Routers:** parse/validate, call services, map HTTP errors — no business rules.
+- **Contract:** implement `doc/specs/openapi.yaml`; update spec when API changes.
+- **WebSocket:** `doc/specs/websocket-protocol.md`; auth via query `token` (JWT) until revised.
+- **Migrations:** Alembic under `backend/alembic`; match PostgreSQL.

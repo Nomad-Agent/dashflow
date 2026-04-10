@@ -1,0 +1,12 @@
+---
+description: DashFlow Next.js frontend conventions
+globs: frontend/**/*
+alwaysApply: false
+---
+
+# Frontend
+
+- Next.js App Router, TypeScript, Tailwind. **MVP views: Kanban, List, Calendar only** — no Gantt/Table in v1 (`doc/MVP-SCOPE.md`).
+- Server state: **TanStack Query**. REST base: `NEXT_PUBLIC_API_URL`. Use `credentials: 'include'` for refresh cookie flows.
+- Sync types with `doc/specs/openapi.yaml` when codegen is added.
+- WebSocket client per `doc/specs/websocket-protocol.md`.

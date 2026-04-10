@@ -1,0 +1,11 @@
+---
+description: DashFlow GitHub Actions and deploy hooks
+globs: .github/**/*
+alwaysApply: false
+---
+
+# CI/CD
+
+- Follow `doc/runbooks/ci-cd.md`. Use **path filters** on workflows; do not commit secrets.
+- Backend CI: `uv sync`, ruff, pytest, `docker build -f backend/Dockerfile` from repo root.
+- Production Render: deploy via **hook** after green CI; staging may auto-deploy on `main`.

@@ -1,0 +1,11 @@
+---
+description: DashFlow documentation and API contract
+globs: doc/**/*
+alwaysApply: false
+---
+
+# Docs
+
+- **MVP truth:** `doc/MVP-SCOPE.md`. **REST contract:** `doc/specs/openapi.yaml`. **WS:** `doc/specs/websocket-protocol.md`.
+- Keep `doc/architecture/runtime-environments.md` aligned with Render/Vercel/Neon.
+- No machine-specific paths; use `backend/`, `frontend/` relative to repo root.
