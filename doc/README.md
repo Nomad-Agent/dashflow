@@ -14,7 +14,6 @@
 
 ## Runbooks
 
-- [`runbooks/local-dev.md`](runbooks/local-dev.md)
 - [`runbooks/deployment.md`](runbooks/deployment.md)
 - [`runbooks/ci-cd.md`](runbooks/ci-cd.md)
 

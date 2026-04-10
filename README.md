@@ -1,17 +1,40 @@
 # DashFlow
 
-Task workspace monorepo: **FastAPI** (`backend/`), **Next.js** (`frontend/`), product and API specs in **`doc/`**.
+**DashFlow** is a **team task workspace** for organizing work across **workspaces**, **projects**, and **tasks**, with **comments** on tasks and **real-time WebSockets** planned as the collaboration layer grows. The v1 product is intentionally lean: **Kanban**, **List**, and **Calendar** views only—no Gantt or spreadsheet-style table in the first release.
 
-## What it is
+## What the application is
 
-- **MVP (v1):** auth, workspaces, projects, tasks, comments, WebSockets; UI views **Kanban, List, Calendar** only (see [`doc/MVP-SCOPE.md`](doc/MVP-SCOPE.md)).
-- **Stack:** PostgreSQL (Neon for local/CI, Render Postgres for staging/prod), JWT access token + httpOnly refresh cookie on the API host, Vercel + Render for deploy (when wired).
+- A **multi-tenant-style workspace** model: users belong to workspaces (via membership), projects live inside a workspace, and tasks belong to a project. Comments attach to tasks.
+- A **web application** delivered as a **Next.js** frontend and a **FastAPI** backend, talking over a **versioned REST API** (`/api/v1`) and (for live features) a **WebSocket** endpoint authenticated with the same access JWT as the REST API.
+- An **MVP (v1)** rebuild: auth, core CRUD for the domain above, WS scaffolding, and three UI modes for viewing tasks—aligned with [`doc/MVP-SCOPE.md`](doc/MVP-SCOPE.md).
+
+## What it does (for users and operators)
+
+| Area | Behavior |
+|------|----------|
+| **Identity** | Users **register** and **sign in**. The API issues a short-lived **access JWT** (Bearer) and sets an **httpOnly refresh cookie** on the API host so the SPA can obtain new access tokens without storing long-lived secrets in `localStorage`. |
+| **Workspaces** | Signed-in users **create workspaces** and **list** those they belong to. Each workspace has a stable **slug** (for URLs and display) and enforces access through **workspace membership**. |
+| **Projects** | Inside a workspace, users **list/create/update/delete projects** (ordering and metadata like description/color are supported for UI polish). |
+| **Tasks** | Per project, users **list/create/update/delete tasks** with **status**, **priority**, **dates**, **assignee**, and **position** (for Kanban ordering). |
+| **Comments** | On a task, users **add** comments; authors may **edit or delete** their own comments. |
+| **Live updates** | **WebSocket** (`/api/v1/ws?token=…`) verifies the access JWT; the protocol is documented in [`doc/specs/websocket-protocol.md`](doc/specs/websocket-protocol.md) (v1 includes connect + echo; domain events come next). |
+| **Deployment shape** | **Frontend:** Vercel (Git-based build). **Backend:** Render (Docker). **Database:** PostgreSQL—**Neon** for local/CI-style URLs, **Render Postgres** for staging/production when wired. |
+
+## Repository layout
+
+| Path | Role |
+|------|------|
+| `backend/` | FastAPI app under `backend/app/` (routers → services → repositories → models). Alembic migrations, `uv` + `pyproject.toml`. |
+| `frontend/` | Next.js 14 App Router, TypeScript, Tailwind, TanStack Query. |
+| `doc/` | Product scope, **OpenAPI** contract, WS protocol, architecture notes, runbooks. |
+| [`AGENTS.md`](AGENTS.md) | How AI assistants should work in this repo (roles, constraints, prompt snippets). |
+| [`CONTEXT.md`](CONTEXT.md) | **Living context** for agents and humans—update when behavior or architecture materially changes. |
 
 ## Prerequisites
 
 - Python **3.12+**, [`uv`](https://docs.astral.sh/uv/)
 - Node **18+**, npm
-- **PostgreSQL** — [Neon](https://neon.tech) recommended; use `postgresql+asyncpg://...` URLs
+- **PostgreSQL** — [Neon](https://neon.tech) recommended locally; use `postgresql+asyncpg://...` URLs (plain `postgresql://` is normalized for async SQLAlchemy).
 
 ## Local development (single source of truth)
 
@@ -51,9 +74,9 @@ npm run dev
 |----------|-----|
 | `DATABASE_URL` | Used on Render / single-URL setups; wins if set. |
 | `DATABASE_URL_DEV` | Local dev when `DATABASE_URL` is unset. |
-| `DATABASE_URL_TEST` | **CI / pytest** when tests need a DB (set in GitHub Actions). |
+| `DATABASE_URL_TEST` | **CI / pytest** when tests need a DB (see `backend/tests/conftest.py`; optional GitHub secret). |
 
-Production DB on Render is injected as `DATABASE_URL` when you deploy — no need for a local prod URL.
+Production DB on Render is injected as `DATABASE_URL` when you deploy—no need for a local prod URL.
 
 ### Manual smoke checks
 
@@ -70,12 +93,13 @@ docker compose up --build api
 
 Frontend is **not** run in Docker for production (Vercel builds from Git). Details: [`doc/architecture/containers.md`](doc/architecture/containers.md).
 
-## Documentation and Cursor
+## Documentation index
 
 | Doc | Purpose |
 |-----|---------|
 | [`doc/README.md`](doc/README.md) | Spec index (OpenAPI, WS, MVP scope) |
-| [`AGENTS.md`](AGENTS.md) | Backend / Frontend / CI roles in Cursor |
+| [`AGENTS.md`](AGENTS.md) | Agent roles, constraints, copy-paste prompts |
+| [`CONTEXT.md`](CONTEXT.md) | Current product/engineering context (maintain after material changes) |
 | [`doc/runbooks/deployment.md`](doc/runbooks/deployment.md) | Render + Vercel when you deploy |
 | [`doc/runbooks/ci-cd.md`](doc/runbooks/ci-cd.md) | GitHub Actions |
 
