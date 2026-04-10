@@ -5,13 +5,33 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --muted: #737373;
+  --muted-foreground: #525252;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --border: #e5e5e5;
+  --input: #fafafa;
+  --accent: #f5f5f5;
+  --accent-foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --muted: #a3a3a3;
+    --muted-foreground: #737373;
+    --card: #171717;
+    --card-foreground: #ededed;
+    --border: #404040;
+    --input: #141414;
+    --accent: #262626;
+    --accent-foreground: #ededed;
   }
+}
+
+html {
+  color-scheme: light dark;
 }
 
 body {

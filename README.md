@@ -65,7 +65,10 @@ npm install
 npm run dev
 ```
 
-- **App:** `http://localhost:3000` (see `frontend/package.json` if the dev port differs).
+- After `npm run dev`, the terminal should show **“Ready”** and **stay running** (no shell prompt). Open the **Local** URL it prints (usually `http://localhost:3000`). Use **Ctrl+C** only when you want to stop the dev server.
+- If **port 3000 is already in use**, Next.js may bind to **3001** instead—read the **Local:** line in the output.
+- From Windows/WSL or if the browser cannot reach `localhost`, try `npm run dev:host` (listens on `0.0.0.0`).
+- **App:** `http://localhost:3000` (or the port shown in the terminal).
 - Set **`NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1`**
 
 ### Environment variables (backend)

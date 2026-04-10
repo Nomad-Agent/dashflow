@@ -58,7 +58,7 @@ export default function ProjectViewsLayout({ children }: { children: ReactNode }
   return (
     <RequireAuth>
       <div className="mx-auto max-w-6xl p-6">
-        <nav className="mb-6 flex flex-wrap gap-2 border-b border-neutral-200 pb-3">
+        <nav className="mb-6 flex flex-wrap gap-2 border-b border-border pb-3">
           {tabs.map((t) => {
             const href = `${base}/${t.href}`;
             const active = pathname?.startsWith(href);
@@ -67,7 +67,9 @@ export default function ProjectViewsLayout({ children }: { children: ReactNode }
                 key={t.href}
                 href={href}
                 className={`rounded px-3 py-1.5 text-sm font-medium ${
-                  active ? "bg-neutral-900 text-white" : "text-neutral-700 hover:bg-neutral-100"
+                  active
+                    ? "bg-foreground text-background"
+                    : "text-muted hover:bg-accent hover:text-accent-foreground"
                 }`}
               >
                 {t.label}
@@ -76,14 +78,16 @@ export default function ProjectViewsLayout({ children }: { children: ReactNode }
           })}
           <span
             className={`ml-auto rounded px-2 py-1 text-xs ${
-              wsConnected ? "bg-emerald-100 text-emerald-700" : "bg-neutral-100 text-neutral-500"
+              wsConnected
+                ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
+                : "bg-accent text-muted-foreground"
             }`}
           >
             WS: {wsConnected ? "connected" : "connecting"}
           </span>
           <Link
             href={`/w/${params.workspaceId}`}
-            className="text-sm text-neutral-500 underline"
+            className="text-sm text-muted underline underline-offset-4"
           >
             Back to projects
           </Link>

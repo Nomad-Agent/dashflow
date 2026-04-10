@@ -32,52 +32,52 @@ export default function RegisterPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-6 p-8">
-      <h1 className="text-2xl font-semibold">Create account</h1>
+      <h1 className="text-2xl font-semibold text-foreground">Create account</h1>
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1 text-sm">
-          <span className="text-neutral-600">Name</span>
+          <span className="text-muted">Name</span>
           <input
             type="text"
-            className="rounded border border-neutral-300 px-3 py-2"
+            className="rounded border border-border bg-input px-3 py-2 text-foreground placeholder:text-muted-foreground"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
-          <span className="text-neutral-600">Email</span>
+          <span className="text-muted">Email</span>
           <input
             type="email"
             autoComplete="email"
-            className="rounded border border-neutral-300 px-3 py-2"
+            className="rounded border border-border bg-input px-3 py-2 text-foreground placeholder:text-muted-foreground"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
-          <span className="text-neutral-600">Password (min 8)</span>
+          <span className="text-muted">Password (min 8)</span>
           <input
             type="password"
             autoComplete="new-password"
-            className="rounded border border-neutral-300 px-3 py-2"
+            className="rounded border border-border bg-input px-3 py-2 text-foreground placeholder:text-muted-foreground"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             minLength={8}
             required
           />
         </label>
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}
         <button
           type="submit"
           disabled={pending}
-          className="rounded bg-neutral-900 px-4 py-2 text-white disabled:opacity-50"
+          className="rounded bg-foreground px-4 py-2 text-background disabled:opacity-50"
         >
           {pending ? "Creating…" : "Register"}
         </button>
       </form>
-      <p className="text-sm text-neutral-600">
+      <p className="text-sm text-muted">
         Already have an account?{" "}
-        <Link href="/login" className="text-neutral-900 underline">
+        <Link href="/login" className="text-foreground underline underline-offset-4">
           Sign in
         </Link>
       </p>

@@ -46,16 +46,16 @@ export default function CalendarPage() {
 
   return (
     <div>
-      <h1 className="mb-2 text-xl font-semibold">Calendar</h1>
-      <p className="mb-4 text-sm text-neutral-500">
-        Month <span className="font-mono">{key}</span> — tasks with a due date
+      <h1 className="mb-2 text-xl font-semibold text-foreground">Calendar</h1>
+      <p className="mb-4 text-sm text-muted-foreground">
+        Month <span className="font-mono text-foreground">{key}</span> — tasks with a due date
       </p>
       {isLoading ? (
-        <p className="text-neutral-500">Loading tasks…</p>
+        <p className="text-muted-foreground">Loading tasks…</p>
       ) : (
-        <div className="grid grid-cols-7 gap-px rounded border border-neutral-200 bg-neutral-200 text-xs sm:text-sm">
+        <div className="grid grid-cols-7 gap-px rounded border border-border bg-border text-xs sm:text-sm">
           {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
-            <div key={d} className="bg-neutral-100 px-1 py-2 text-center font-medium text-neutral-600">
+            <div key={d} className="bg-accent px-1 py-2 text-center font-medium text-muted">
               {d}
             </div>
           ))}
@@ -63,13 +63,13 @@ export default function CalendarPage() {
             const iso = `${key}-${String(day).padStart(2, "0")}`;
             const list = byDate.get(iso) ?? [];
             return (
-              <div key={iso} className="min-h-[5rem] bg-white p-1 sm:p-2">
-                <div className="mb-1 font-medium text-neutral-400">{day}</div>
+              <div key={iso} className="min-h-[5rem] bg-card p-1 text-card-foreground sm:p-2">
+                <div className="mb-1 font-medium text-muted-foreground">{day}</div>
                 <ul className="space-y-1">
                   {list.map((t) => (
                     <li
                       key={t.id}
-                      className="truncate rounded bg-neutral-900/5 px-1 py-0.5 text-[11px] sm:text-xs"
+                      className="truncate rounded bg-accent px-1 py-0.5 text-[11px] sm:text-xs"
                       title={t.title}
                     >
                       {t.title}

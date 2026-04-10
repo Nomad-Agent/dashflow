@@ -69,7 +69,7 @@ export default function KanbanPage() {
 
   return (
     <div>
-      <h1 className="mb-4 text-xl font-semibold">Kanban</h1>
+      <h1 className="mb-4 text-xl font-semibold text-foreground">Kanban</h1>
       <form
         className="mb-4 flex gap-2"
         onSubmit={(e) => {
@@ -78,7 +78,7 @@ export default function KanbanPage() {
         }}
       >
         <input
-          className="w-full rounded border border-neutral-300 px-3 py-2 text-sm"
+          className="w-full rounded border border-border bg-input px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground"
           placeholder="Add a task title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -86,34 +86,37 @@ export default function KanbanPage() {
         <button
           type="submit"
           disabled={createTaskMutation.isPending}
-          className="rounded bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50"
+          className="rounded bg-foreground px-4 py-2 text-sm text-background disabled:opacity-50"
         >
           Add
         </button>
       </form>
       {isLoading ? (
-        <p className="text-neutral-500">Loading tasks…</p>
+        <p className="text-muted-foreground">Loading tasks…</p>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-6">
           {columnKeys.map((status) => (
-            <section key={status} className="flex min-h-[12rem] flex-col rounded border border-neutral-200 bg-neutral-50/80">
-              <h2 className="border-b border-neutral-200 px-2 py-2 text-xs font-semibold uppercase tracking-wide text-neutral-600">
+            <section
+              key={status}
+              className="flex min-h-[12rem] flex-col rounded border border-border bg-accent/40"
+            >
+              <h2 className="border-b border-border px-2 py-2 text-xs font-semibold uppercase tracking-wide text-muted">
                 {label(status)}
               </h2>
               <ul className="flex flex-1 flex-col gap-2 p-2">
                 {(byStatus.get(status) ?? []).map((t) => (
                   <li
                     key={t.id}
-                    className="rounded border border-neutral-200 bg-white px-2 py-2 text-sm shadow-sm"
+                    className="rounded border border-border bg-card px-2 py-2 text-sm text-card-foreground shadow-sm"
                   >
                     <p className="font-medium leading-snug">{t.title}</p>
                     {t.priority !== "none" ? (
-                      <p className="mt-1 text-xs text-neutral-500">{t.priority}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">{t.priority}</p>
                     ) : null}
                     <div className="mt-2 flex gap-1">
                       <button
                         type="button"
-                        className="rounded border border-neutral-300 px-2 py-0.5 text-[11px]"
+                        className="rounded border border-border bg-background px-2 py-0.5 text-[11px] text-foreground"
                         disabled={
                           updateTaskMutation.isPending ||
                           STATUS_ORDER.indexOf(t.status as (typeof STATUS_ORDER)[number]) <= 0
@@ -134,7 +137,7 @@ export default function KanbanPage() {
                       </button>
                       <button
                         type="button"
-                        className="rounded border border-neutral-300 px-2 py-0.5 text-[11px]"
+                        className="rounded border border-border bg-background px-2 py-0.5 text-[11px] text-foreground"
                         disabled={
                           updateTaskMutation.isPending ||
                           STATUS_ORDER.indexOf(t.status as (typeof STATUS_ORDER)[number]) ===

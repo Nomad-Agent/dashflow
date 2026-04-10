@@ -79,7 +79,7 @@ export default function ListPage() {
 
   return (
     <div>
-      <h1 className="mb-4 text-xl font-semibold">List</h1>
+      <h1 className="mb-4 text-xl font-semibold text-foreground">List</h1>
       <form
         className="mb-4 flex gap-2"
         onSubmit={(e) => {
@@ -88,7 +88,7 @@ export default function ListPage() {
         }}
       >
         <input
-          className="w-full rounded border border-neutral-300 px-3 py-2 text-sm"
+          className="w-full rounded border border-border bg-input px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground"
           placeholder="Add a task title"
           value={taskTitle}
           onChange={(e) => setTaskTitle(e.target.value)}
@@ -96,17 +96,17 @@ export default function ListPage() {
         <button
           type="submit"
           disabled={createTaskMutation.isPending}
-          className="rounded bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50"
+          className="rounded bg-foreground px-4 py-2 text-sm text-background disabled:opacity-50"
         >
           Add
         </button>
       </form>
       {isLoading ? (
-        <p className="text-neutral-500">Loading tasks…</p>
+        <p className="text-muted-foreground">Loading tasks…</p>
       ) : (
-        <div className="overflow-x-auto rounded border border-neutral-200">
-          <table className="min-w-full text-left text-sm">
-            <thead className="border-b border-neutral-200 bg-neutral-50">
+        <div className="overflow-x-auto rounded border border-border">
+          <table className="min-w-full text-left text-sm text-foreground">
+            <thead className="border-b border-border bg-accent">
               <tr>
                 <th className="px-3 py-2 font-medium">Title</th>
                 <th className="px-3 py-2 font-medium">Status</th>
@@ -118,28 +118,28 @@ export default function ListPage() {
               {taskList.map((t) => (
                 <tr
                   key={t.id}
-                  className={`cursor-pointer border-b border-neutral-100 last:border-0 ${
-                    selectedTask?.id === t.id ? "bg-neutral-50" : ""
+                  className={`cursor-pointer border-b border-border last:border-0 ${
+                    selectedTask?.id === t.id ? "bg-accent" : ""
                   }`}
                   onClick={() => setSelectedTask(t)}
                 >
                   <td className="px-3 py-2 font-medium">{t.title}</td>
-                  <td className="px-3 py-2 text-neutral-600">{t.status.replace(/_/g, " ")}</td>
-                  <td className="px-3 py-2 text-neutral-600">{t.priority}</td>
-                  <td className="px-3 py-2 text-neutral-600">{t.due_date ?? "—"}</td>
+                  <td className="px-3 py-2 text-muted">{t.status.replace(/_/g, " ")}</td>
+                  <td className="px-3 py-2 text-muted">{t.priority}</td>
+                  <td className="px-3 py-2 text-muted">{t.due_date ?? "—"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
-      <section className="mt-6 rounded border border-neutral-200 p-4">
-        <h2 className="mb-2 text-sm font-medium text-neutral-600">Comments</h2>
+      <section className="mt-6 rounded border border-border bg-card p-4">
+        <h2 className="mb-2 text-sm font-medium text-muted">Comments</h2>
         {!selectedTask ? (
-          <p className="text-sm text-neutral-500">Select a task row to view/add comments.</p>
+          <p className="text-sm text-muted-foreground">Select a task row to view/add comments.</p>
         ) : (
           <>
-            <p className="mb-2 text-sm text-neutral-700">
+            <p className="mb-2 text-sm text-foreground">
               Task: <span className="font-medium">{selectedTask.title}</span>
             </p>
             <form
@@ -150,7 +150,7 @@ export default function ListPage() {
               }}
             >
               <input
-                className="w-full rounded border border-neutral-300 px-3 py-2 text-sm"
+                className="w-full rounded border border-border bg-input px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground"
                 placeholder="Write a comment"
                 value={commentDraft}
                 onChange={(e) => setCommentDraft(e.target.value)}
@@ -158,17 +158,17 @@ export default function ListPage() {
               <button
                 type="submit"
                 disabled={createCommentMutation.isPending || !commentDraft.trim()}
-                className="rounded bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50"
+                className="rounded bg-foreground px-4 py-2 text-sm text-background disabled:opacity-50"
               >
                 Add
               </button>
             </form>
             {commentsQuery.isLoading ? (
-              <p className="text-sm text-neutral-500">Loading comments…</p>
+              <p className="text-sm text-muted-foreground">Loading comments…</p>
             ) : (
               <ul className="space-y-2">
                 {(commentsQuery.data ?? []).map((c) => (
-                  <li key={c.id} className="rounded border border-neutral-200 p-2">
+                  <li key={c.id} className="rounded border border-border bg-background p-2 text-foreground">
                     {editingComment?.id === c.id ? (
                       <form
                         className="flex gap-2"
@@ -178,19 +178,19 @@ export default function ListPage() {
                         }}
                       >
                         <input
-                          className="w-full rounded border border-neutral-300 px-3 py-1.5 text-sm"
+                          className="w-full rounded border border-border bg-input px-3 py-1.5 text-sm text-foreground"
                           value={editDraft}
                           onChange={(e) => setEditDraft(e.target.value)}
                         />
                         <button
                           type="submit"
-                          className="rounded border border-neutral-300 px-2 py-1 text-xs"
+                          className="rounded border border-border bg-background px-2 py-1 text-xs text-foreground"
                         >
                           Save
                         </button>
                         <button
                           type="button"
-                          className="rounded border border-neutral-300 px-2 py-1 text-xs"
+                          className="rounded border border-border bg-background px-2 py-1 text-xs text-foreground"
                           onClick={() => {
                             setEditingComment(null);
                             setEditDraft("");
@@ -205,7 +205,7 @@ export default function ListPage() {
                         <div className="mt-1 flex gap-2 text-xs">
                           <button
                             type="button"
-                            className="rounded border border-neutral-300 px-2 py-1"
+                            className="rounded border border-border bg-background px-2 py-1 text-foreground"
                             onClick={() => {
                               setEditingComment(c);
                               setEditDraft(c.body);
@@ -215,7 +215,7 @@ export default function ListPage() {
                           </button>
                           <button
                             type="button"
-                            className="rounded border border-neutral-300 px-2 py-1"
+                            className="rounded border border-border bg-background px-2 py-1 text-foreground"
                             onClick={() => deleteCommentMutation.mutate(c.id)}
                           >
                             Delete

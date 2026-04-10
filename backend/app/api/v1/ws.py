@@ -8,6 +8,15 @@ from app.core.security import decode_token
 router = APIRouter()
 
 
+async def _reject_ws(websocket: WebSocket, *, reason: str) -> None:
+    """Accept then close with 4401 so the client gets a proper WS close (not HTTP 403).
+
+    Starlette/Uvicorn reject the upgrade with 403 if ``close()`` runs before ``accept()``.
+    """
+    await websocket.accept()
+    await websocket.close(code=4401, reason=reason)
+
+
 @router.websocket("/ws")
 async def websocket_v1(
     websocket: WebSocket,
@@ -15,12 +24,12 @@ async def websocket_v1(
 ) -> None:
     settings = get_settings()
     if not token:
-        await websocket.close(code=4401, reason="missing_token")
+        await _reject_ws(websocket, reason="missing_token")
         return
     try:
         decode_token(settings, token, "access")
     except ValueError:
-        await websocket.close(code=4401, reason="invalid_token")
+        await _reject_ws(websocket, reason="invalid_token")
         return
 
     await websocket.accept()

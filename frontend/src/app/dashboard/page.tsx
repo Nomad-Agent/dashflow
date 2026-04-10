@@ -49,18 +49,18 @@ function DashboardInner() {
   return (
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 p-8">
       <header className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">Workspaces</h1>
+        <h1 className="text-2xl font-semibold text-foreground">Workspaces</h1>
         <button
           type="button"
           onClick={() => logout()}
-          className="text-sm text-neutral-600 underline"
+          className="text-sm text-muted underline underline-offset-4"
         >
           Log out
         </button>
       </header>
 
-      <section className="rounded border border-neutral-200 p-4">
-        <h2 className="mb-2 text-sm font-medium text-neutral-600">New workspace</h2>
+      <section className="rounded border border-border bg-card p-4">
+        <h2 className="mb-2 text-sm font-medium text-muted">New workspace</h2>
         <form
           className="flex flex-wrap items-end gap-2"
           onSubmit={(e) => {
@@ -69,7 +69,7 @@ function DashboardInner() {
           }}
         >
           <input
-            className="min-w-[12rem] flex-1 rounded border border-neutral-300 px-3 py-2 text-sm"
+            className="min-w-[12rem] flex-1 rounded border border-border bg-input px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground"
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -77,36 +77,36 @@ function DashboardInner() {
           <button
             type="submit"
             disabled={createWs.isPending}
-            className="rounded bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50"
+            className="rounded bg-foreground px-4 py-2 text-sm text-background disabled:opacity-50"
           >
             Create
           </button>
         </form>
         {createWs.isError ? (
-          <p className="mt-2 text-sm text-red-600">{(createWs.error as Error).message}</p>
+          <p className="mt-2 text-sm text-red-600 dark:text-red-400">{(createWs.error as Error).message}</p>
         ) : null}
       </section>
 
       {isLoading ? (
-        <p className="text-neutral-500">Loading workspaces…</p>
+        <p className="text-muted-foreground">Loading workspaces…</p>
       ) : (
         <ul className="flex flex-col gap-2">
           {(workspaces ?? []).map((w) => (
             <li key={w.id}>
               <Link
                 href={`/w/${w.id}`}
-                className="block rounded border border-neutral-200 px-4 py-3 hover:bg-neutral-50"
+                className="block rounded border border-border bg-card px-4 py-3 text-card-foreground hover:bg-accent"
               >
                 <span className="font-medium">{w.name}</span>
-                <span className="ml-2 text-sm text-neutral-500">{w.slug}</span>
+                <span className="ml-2 text-sm text-muted-foreground">{w.slug}</span>
               </Link>
             </li>
           ))}
         </ul>
       )}
 
-      <p className="text-sm text-neutral-500">
-        <Link href="/" className="underline">
+      <p className="text-sm text-muted-foreground">
+        <Link href="/" className="text-foreground underline underline-offset-4">
           Home
         </Link>
       </p>

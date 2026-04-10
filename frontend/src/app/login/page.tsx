@@ -31,42 +31,42 @@ export default function LoginPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-6 p-8">
-      <h1 className="text-2xl font-semibold">Sign in</h1>
+      <h1 className="text-2xl font-semibold text-foreground">Sign in</h1>
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1 text-sm">
-          <span className="text-neutral-600">Email</span>
+          <span className="text-muted">Email</span>
           <input
             type="email"
             autoComplete="email"
-            className="rounded border border-neutral-300 px-3 py-2"
+            className="rounded border border-border bg-input px-3 py-2 text-foreground placeholder:text-muted-foreground"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
-          <span className="text-neutral-600">Password</span>
+          <span className="text-muted">Password</span>
           <input
             type="password"
             autoComplete="current-password"
-            className="rounded border border-neutral-300 px-3 py-2"
+            className="rounded border border-border bg-input px-3 py-2 text-foreground placeholder:text-muted-foreground"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </label>
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}
         <button
           type="submit"
           disabled={pending}
-          className="rounded bg-neutral-900 px-4 py-2 text-white disabled:opacity-50"
+          className="rounded bg-foreground px-4 py-2 text-background disabled:opacity-50"
         >
           {pending ? "Signing in…" : "Sign in"}
         </button>
       </form>
-      <p className="text-sm text-neutral-600">
+      <p className="text-sm text-muted">
         No account?{" "}
-        <Link href="/register" className="text-neutral-900 underline">
+        <Link href="/register" className="text-foreground underline underline-offset-4">
           Register
         </Link>
       </p>

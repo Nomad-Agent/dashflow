@@ -14,7 +14,9 @@ export function RequireAuth({ children }: { children: ReactNode }) {
 
   if (!ready) {
     return (
-      <div className="flex min-h-[40vh] items-center justify-center text-neutral-500">Loading…</div>
+      <div className="flex min-h-[40vh] items-center justify-center text-muted-foreground">
+        Loading…
+      </div>
     );
   }
   if (!token) return null;
