@@ -57,6 +57,8 @@ async def logout(response: Response) -> dict[str, str]:
     response.delete_cookie(
         key=settings.refresh_cookie_name,
         path="/api/v1/auth",
+        secure=settings.refresh_cookie_secure,
+        samesite=settings.refresh_cookie_samesite,
     )
     return {"status": "ok"}
 
