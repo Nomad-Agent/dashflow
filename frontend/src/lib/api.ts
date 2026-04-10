@@ -1,4 +1,4 @@
-import type { ProjectRead, TaskRead, UserRead, WorkspaceRead } from "@/lib/types";
+import type { CommentRead, ProjectRead, TaskRead, UserRead, WorkspaceRead } from "@/lib/types";
 
 /** REST API base, e.g. http://localhost:8000/api/v1 — no trailing slash. */
 export function getApiBaseUrl(): string {
@@ -94,6 +94,95 @@ export async function fetchProjects(token: string, workspaceId: string): Promise
   return apiJson(`/workspaces/${workspaceId}/projects`, { token });
 }
 
+export async function createProject(
+  token: string,
+  workspaceId: string,
+  body: { name: string; description?: string | null; color?: string | null; sort_order?: number },
+): Promise<ProjectRead> {
+  return apiJson(`/workspaces/${workspaceId}/projects`, {
+    method: "POST",
+    body,
+    token,
+  });
+}
+
 export async function fetchTasks(token: string, projectId: string): Promise<TaskRead[]> {
   return apiJson(`/projects/${projectId}/tasks`, { token });
+}
+
+export async function createTask(
+  token: string,
+  projectId: string,
+  body: {
+    title: string;
+    description?: string | null;
+    status?: string;
+    priority?: string;
+    due_date?: string | null;
+    start_date?: string | null;
+    assignee_id?: string | null;
+    position?: number;
+  },
+): Promise<TaskRead> {
+  return apiJson(`/projects/${projectId}/tasks`, {
+    method: "POST",
+    body,
+    token,
+  });
+}
+
+export async function updateTask(
+  token: string,
+  taskId: string,
+  body: Partial<{
+    title: string;
+    description: string | null;
+    status: string;
+    priority: string;
+    due_date: string | null;
+    start_date: string | null;
+    assignee_id: string | null;
+    position: number;
+  }>,
+): Promise<TaskRead> {
+  return apiJson(`/tasks/${taskId}`, {
+    method: "PATCH",
+    body,
+    token,
+  });
+}
+
+export async function fetchComments(token: string, taskId: string): Promise<CommentRead[]> {
+  return apiJson(`/tasks/${taskId}/comments`, { token });
+}
+
+export async function createComment(
+  token: string,
+  taskId: string,
+  body: { body: string },
+): Promise<CommentRead> {
+  return apiJson(`/tasks/${taskId}/comments`, {
+    method: "POST",
+    body,
+    token,
+  });
+}
+
+export async function updateComment(
+  token: string,
+  commentId: string,
+  body: { body: string },
+): Promise<CommentRead> {
+  return apiJson(`/comments/${commentId}`, {
+    method: "PATCH",
+    body,
+    token,
+  });
+}
+
+export async function deleteComment(token: string, commentId: string): Promise<void> {
+  return apiJson(`/comments/${commentId}`, {
+    method: "DELETE",
+    token,
+  });
 }

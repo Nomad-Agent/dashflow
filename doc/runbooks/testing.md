@@ -72,6 +72,13 @@ See [`ci-cd.md`](ci-cd.md) for workflow-level details.
 3. Create a workspace from `/dashboard`.
 4. Verify project/task/comment API flows via Swagger and/or UI.
 5. Open WS connection with access JWT and verify `connected` event.
+6. Verify project views show WS status (`connecting` -> `connected`) and recover after refresh.
+
+## Release QA handoff checklist
+
+- [ ] CI checks (`backend`, `frontend`, `contract`) are green on target commit.
+- [ ] Post-deploy smoke checklist executed on staging.
+- [ ] If deploying production: rollback path confirmed in `deployment.md`.
 
 ## Non-goals for this runbook
 

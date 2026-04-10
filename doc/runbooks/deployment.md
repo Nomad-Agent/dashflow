@@ -25,3 +25,25 @@ Store hook URLs in GitHub **environment** secrets (e.g. `RENDER_DEPLOY_HOOK_PROD
 - [ ] Vercel env vars
 - [ ] GitHub secrets for CI + deploy hook
 - [ ] Run migrations on each new environment
+
+## Rollback and failure handling
+
+### Rollback triggers
+
+- Release health check fails after deploy.
+- Smoke checks fail for auth or core CRUD paths.
+- Elevated 5xx error rate immediately post deploy.
+
+### Rollback steps (production)
+
+1. Pause further deploys (disable hook trigger temporarily).
+2. In Render dashboard, rollback to previous healthy deploy.
+3. Re-run smoke checks (health, auth, workspace/project/task/comment path, WS connect).
+4. Open incident note with failed commit SHA and root-cause summary.
+
+### Post-deploy smoke checklist
+
+- `GET /api/v1/health` returns `ok`.
+- Register/login/refresh/logout work.
+- Create workspace, project, task, comment from UI flows.
+- WS connects on project views and remains stable after navigation.

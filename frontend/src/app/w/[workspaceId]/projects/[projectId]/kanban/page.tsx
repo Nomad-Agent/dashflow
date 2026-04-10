@@ -1,11 +1,11 @@
 "use client";
 
 import { useAuth } from "@/components/auth-provider";
-import { fetchTasks } from "@/lib/api";
+import { createTask, fetchTasks, updateTask } from "@/lib/api";
 import type { TaskRead } from "@/lib/types";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 const STATUS_ORDER = [
   "todo",
@@ -24,11 +24,32 @@ export default function KanbanPage() {
   const params = useParams<{ projectId: string }>();
   const projectId = params.projectId;
   const { token } = useAuth();
+  const qc = useQueryClient();
+  const [title, setTitle] = useState("");
 
   const { data: tasks, isLoading } = useQuery({
     queryKey: ["tasks", projectId, token],
     queryFn: () => fetchTasks(token!, projectId),
     enabled: !!token && !!projectId,
+  });
+
+  const createTaskMutation = useMutation({
+    mutationFn: async () =>
+      createTask(token!, projectId, {
+        title: title.trim() || "New task",
+      }),
+    onSuccess: () => {
+      setTitle("");
+      qc.invalidateQueries({ queryKey: ["tasks", projectId, token] });
+    },
+  });
+
+  const updateTaskMutation = useMutation({
+    mutationFn: async ({ taskId, status }: { taskId: string; status: string }) =>
+      updateTask(token!, taskId, { status }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["tasks", projectId, token] });
+    },
   });
 
   const { columnKeys, byStatus } = useMemo(() => {
@@ -49,6 +70,27 @@ export default function KanbanPage() {
   return (
     <div>
       <h1 className="mb-4 text-xl font-semibold">Kanban</h1>
+      <form
+        className="mb-4 flex gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          createTaskMutation.mutate();
+        }}
+      >
+        <input
+          className="w-full rounded border border-neutral-300 px-3 py-2 text-sm"
+          placeholder="Add a task title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <button
+          type="submit"
+          disabled={createTaskMutation.isPending}
+          className="rounded bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50"
+        >
+          Add
+        </button>
+      </form>
       {isLoading ? (
         <p className="text-neutral-500">Loading tasks…</p>
       ) : (
@@ -68,6 +110,51 @@ export default function KanbanPage() {
                     {t.priority !== "none" ? (
                       <p className="mt-1 text-xs text-neutral-500">{t.priority}</p>
                     ) : null}
+                    <div className="mt-2 flex gap-1">
+                      <button
+                        type="button"
+                        className="rounded border border-neutral-300 px-2 py-0.5 text-[11px]"
+                        disabled={
+                          updateTaskMutation.isPending ||
+                          STATUS_ORDER.indexOf(t.status as (typeof STATUS_ORDER)[number]) <= 0
+                        }
+                        onClick={() => {
+                          const idx = STATUS_ORDER.indexOf(
+                            t.status as (typeof STATUS_ORDER)[number],
+                          );
+                          if (idx > 0) {
+                            updateTaskMutation.mutate({
+                              taskId: t.id,
+                              status: STATUS_ORDER[idx - 1],
+                            });
+                          }
+                        }}
+                      >
+                        ◀
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded border border-neutral-300 px-2 py-0.5 text-[11px]"
+                        disabled={
+                          updateTaskMutation.isPending ||
+                          STATUS_ORDER.indexOf(t.status as (typeof STATUS_ORDER)[number]) ===
+                            STATUS_ORDER.length - 1
+                        }
+                        onClick={() => {
+                          const idx = STATUS_ORDER.indexOf(
+                            t.status as (typeof STATUS_ORDER)[number],
+                          );
+                          if (idx >= 0 && idx < STATUS_ORDER.length - 1) {
+                            updateTaskMutation.mutate({
+                              taskId: t.id,
+                              status: STATUS_ORDER[idx + 1],
+                            });
+                          }
+                        }}
+                      >
+                        ▶
+                      </button>
+                    </div>
                   </li>
                 ))}
               </ul>

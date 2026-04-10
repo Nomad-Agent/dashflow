@@ -91,7 +91,7 @@ Client state: access token in memory (React context); refresh on load via cookie
 ## Known gaps / next chunks (non-exhaustive)
 
 - Richer **WS domain events** (invalidate/query sync beyond echo).
-- **Project/task CRUD** in the UI beyond minimal flows (some flows still API-first).
+- Complete coverage for UI edit/delete flows across all task attributes (currently baseline create/status/comment flows exist).
 - **Refresh rotation / revocation** if product requires stricter session security.
 - **E2E** browser tests (Playwright) to complement current integration/unit coverage.
 
@@ -107,6 +107,7 @@ Client state: access token in memory (React context); refresh on load via cookie
 | 2026-04-09 | README product narrative; AGENTS.md prompt snippets + principles; added this CONTEXT.md for agent/human maintenance. |
 | 2026-04-10 | Added QA/testing agent guidance, `.cursor` QA rule, and dedicated testing runbook with local/CI strategy notes. |
 | 2026-04-10 | Implemented QA baseline: backend auth/authz integration tests, frontend Vitest baseline, CI test gates with Postgres service and migration step. |
+| 2026-04-10 | Gap-hardening phase: UI write flows for project/task/comment, project-view WS client integration, and release docs hardening. |
 
 ---
 
