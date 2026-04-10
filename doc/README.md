@@ -16,6 +16,7 @@
 
 - [`runbooks/deployment.md`](runbooks/deployment.md)
 - [`runbooks/ci-cd.md`](runbooks/ci-cd.md)
+- [`runbooks/testing.md`](runbooks/testing.md)
 
 ## Architecture
 

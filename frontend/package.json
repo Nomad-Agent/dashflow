@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest",
+    "test:ci": "vitest run --coverage",
     "generate:types": "openapi-typescript ../doc/specs/openapi.yaml -o src/lib/generated/api-types.ts",
     "check:types-generated": "npm run generate:types && git diff --exit-code src/lib/generated/api-types.ts"
   },
@@ -17,14 +19,21 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.4",
     "eslint": "^8",
     "eslint-config-next": "14.2.18",
+    "jsdom": "^29.0.2",
     "openapi-typescript": "^7.13.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.4"
   }
 }

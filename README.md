@@ -102,6 +102,7 @@ Frontend is **not** run in Docker for production (Vercel builds from Git). Detai
 | [`CONTEXT.md`](CONTEXT.md) | Current product/engineering context (maintain after material changes) |
 | [`doc/runbooks/deployment.md`](doc/runbooks/deployment.md) | Render + Vercel when you deploy |
 | [`doc/runbooks/ci-cd.md`](doc/runbooks/ci-cd.md) | GitHub Actions |
+| [`doc/runbooks/testing.md`](doc/runbooks/testing.md) | QA strategy, test commands, and validation checklist |
 
 ## CI
 

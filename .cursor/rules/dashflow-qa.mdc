@@ -1,0 +1,14 @@
+---
+description: DashFlow QA and testing conventions
+globs: backend/tests/**,frontend/src/**/*,.github/workflows/**,doc/runbooks/testing.md
+alwaysApply: false
+---
+
+# QA / Testing
+
+- Validate behavior, not only compilation. Prefer failing tests that reveal product risk over shallow snapshots.
+- Backend priorities: auth lifecycle, authorization boundaries (workspace membership, comment ownership), and one happy-path CRUD journey.
+- Frontend priorities: deterministic unit/component tests for auth provider, route guard behavior, and API client calls.
+- Keep tests aligned with `doc/specs/openapi.yaml` and `doc/MVP-SCOPE.md` (Kanban/List/Calendar only in v1).
+- CI is a gate: ensure tests run in workflows and fail fast on regressions.
+- Avoid flaky tests: control time/network, use stable selectors, and isolate shared state.

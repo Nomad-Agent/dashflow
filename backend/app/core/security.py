@@ -9,18 +9,14 @@ from passlib.context import CryptContext
 
 from app.core.config import Settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 
 def hash_password(plain: str) -> str:
-    if len(plain.encode("utf-8")) > 72:
-        plain = plain[:72]
     return pwd_context.hash(plain)
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    if len(plain.encode("utf-8")) > 72:
-        plain = plain[:72]
     return pwd_context.verify(plain, hashed)
 
 

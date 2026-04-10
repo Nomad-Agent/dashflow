@@ -4,14 +4,14 @@
 
 - **Monorepo path filters** — avoid running heavy jobs when unrelated paths change.
 - **Secrets (names only — values in GitHub):**
-  - `DATABASE_URL_TEST` — Neon test branch for backend tests / optional migration check
+  - `DATABASE_URL_TEST` — optional for local/dev integration checks; CI currently uses ephemeral Postgres service
   - `RENDER_DEPLOY_HOOK_PRODUCTION` — optional; used by deploy workflow
 
 ## Workflows (intended)
 
 | Workflow | Trigger | Paths (concept) | Jobs |
 |----------|---------|-----------------|------|
-| `ci.yml` | `pull_request`, `push` to `main` | `backend/**`, `frontend/**`, `doc/specs/**`, workflows | Backend: `uv sync`, ruff, pytest, `docker build`; Frontend: `npm ci`, lint, build; optional: OpenAPI validate |
+| `ci.yml` | `pull_request`, `push` to `main` | `backend/**`, `frontend/**`, `doc/specs/**`, workflows | Backend: `uv sync`, ruff, `alembic upgrade head`, pytest against Postgres service, `docker build`; Frontend: `npm ci`, `test:ci`, lint, build; Contract: OpenAPI lint + generated type sync check |
 
 ## Production deploy
 
@@ -24,4 +24,11 @@
 
 ## Contract drift
 
-- When `doc/specs/openapi.yaml` changes, CI should fail if generated frontend types are out of date (add codegen check when Orval/openapi-typescript is wired).
+- When `doc/specs/openapi.yaml` changes, CI must fail if generated frontend types are out of date (`frontend` script `check:types-generated`).
+
+## Testing strategy references
+
+- QA and test scope/runbook: [`testing.md`](testing.md)
+- Local/CI DB usage:
+  - `DATABASE_URL_TEST` can back local integration tests.
+  - CI uses ephemeral Postgres service containers for deterministic DB-backed tests.

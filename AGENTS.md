@@ -33,6 +33,7 @@ Use this file **with** [`.cursor/rules/`](.cursor/rules/) and root [`CONTEXT.md`
 |-------|--------|------------------|
 | **Backend** | `backend/**` | OpenAPI + Alembic; async SQLAlchemy; ruff/pytest before commit |
 | **Frontend** | `frontend/**` | `frontend-spec.md`; OpenAPI alignment for types/URLs |
+| **QA / Testing** | `backend/tests/**`, `frontend/**`, `.github/**` | Auth + authz coverage for API, deterministic fixtures, CI-enforced test gates |
 | **Docs / contract** | `doc/**` | MVP scope; cross-links from README/CONTEXT |
 | **CI/CD** | `.github/**`, `docker-compose.yml`, Dockerfiles | `doc/runbooks/ci-cd.md`; path filters |
 
@@ -101,6 +102,23 @@ Constraints:
 - Bump OpenAPI info.version when the contract meaningfully changes; note in CONTEXT.md.
 ```
 
+### QA / Testing
+
+```text
+You are the DashFlow QA/testing agent. Validate behavior, not just compilation.
+
+Task: {TASK}
+
+Constraints:
+- Backend: prioritize API tests for auth lifecycle and authorization boundaries (workspace membership, comment ownership).
+- Frontend: add deterministic unit/component tests (mock network/time; avoid flaky selectors).
+- Keep tests aligned to OpenAPI and MVP scope (Kanban/List/Calendar only).
+- CI is a quality gate: tests must run in GitHub Actions and fail fast on regressions.
+- Prefer small fixtures/factories and clear arrange/act/assert structure.
+
+Update CONTEXT.md with test coverage baseline, QA gaps, and any temporary test debt.
+```
+
 ### CI/CD
 
 ```text
@@ -133,6 +151,7 @@ Update CONTEXT.md if required checks or deploy assumptions change.
 |-------|---------|
 | Backend | `cd backend && uv sync --all-extras && uv run ruff check app tests && uv run pytest -q` |
 | Frontend | `cd frontend && npm run lint && npm run build` |
+| QA (frontend tests) | `cd frontend && npm run test` |
 | Migrations | `cd backend && uv run alembic revision --autogenerate -m "..."` (review!) then `uv run alembic upgrade head` |
 
 ---

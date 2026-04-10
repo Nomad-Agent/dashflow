@@ -80,8 +80,8 @@ Client state: access token in memory (React context); refresh on load via cookie
 
 ## CI / tooling
 
-- **Backend:** `uv sync`, `ruff`, `pytest`, Docker image build (`backend/Dockerfile` from repo root). See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
-- **Frontend:** `npm ci`, `lint`, `build` with `NEXT_PUBLIC_API_URL` set for build.
+- **Backend:** `uv sync`, `ruff`, `alembic upgrade head`, `pytest`, Docker image build (`backend/Dockerfile` from repo root). CI uses ephemeral Postgres service.
+- **Frontend:** `npm ci`, `test:ci` (Vitest), `lint`, `build` with `NEXT_PUBLIC_API_URL` set for build.
 - **OpenAPI** `info.version` should move with meaningful contract changes (track here).
 
 **OpenAPI spec version (doc):** `0.2.0` (last known sync with implemented REST surface).
@@ -91,10 +91,9 @@ Client state: access token in memory (React context); refresh on load via cookie
 ## Known gaps / next chunks (non-exhaustive)
 
 - Richer **WS domain events** (invalidate/query sync beyond echo).
-- **OpenAPI codegen** for TypeScript types in CI or on demand.
 - **Project/task CRUD** in the UI beyond minimal flows (some flows still API-first).
 - **Refresh rotation / revocation** if product requires stricter session security.
-- **E2E / DB-backed tests** in CI when `DATABASE_URL_TEST` is available.
+- **E2E** browser tests (Playwright) to complement current integration/unit coverage.
 
 *Agents: append or trim this section as the codebase evolves.*
 
@@ -106,7 +105,9 @@ Client state: access token in memory (React context); refresh on load via cookie
 |--------|--------|
 | 2026-04 | Greenfield monorepo: JWT + cookie auth, workspace graph API, Alembic `002_domain`, Next.js MVP routes (Kanban/List/Calendar), expanded OpenAPI, root git repo. |
 | 2026-04-09 | README product narrative; AGENTS.md prompt snippets + principles; added this CONTEXT.md for agent/human maintenance. |
+| 2026-04-10 | Added QA/testing agent guidance, `.cursor` QA rule, and dedicated testing runbook with local/CI strategy notes. |
+| 2026-04-10 | Implemented QA baseline: backend auth/authz integration tests, frontend Vitest baseline, CI test gates with Postgres service and migration step. |
 
 ---
 
-*Last updated: 2026-04-09 — align this date when you edit materially.*
+*Last updated: 2026-04-10 — align this date when you edit materially.*
