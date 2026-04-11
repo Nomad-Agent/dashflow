@@ -108,7 +108,8 @@ Client state: access token in memory (React context); refresh on load via cookie
 | 2026-04-10 | Added QA/testing agent guidance, `.cursor` QA rule, and dedicated testing runbook with local/CI strategy notes. |
 | 2026-04-10 | Implemented QA baseline: backend auth/authz integration tests, frontend Vitest baseline, CI test gates with Postgres service and migration step. |
 | 2026-04-10 | Gap-hardening phase: UI write flows for project/task/comment, project-view WS client integration, and release docs hardening. |
+| 2026-04-11 | Added Kanban DnD pure-logic tests (frontend) and task status/position reorder integration coverage (backend), with CI-parity verification (`test:ci`, lint/build, ruff/pytest). |
 
 ---
 
-*Last updated: 2026-04-10 — align this date when you edit materially.*
+*Last updated: 2026-04-11 — align this date when you edit materially.*

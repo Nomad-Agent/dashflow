@@ -138,3 +138,70 @@ async def test_core_crud_happy_path(api_client: AsyncClient) -> None:
     list_comments = await api_client.get(f"/api/v1/tasks/{task_id}/comments", headers=headers)
     assert list_comments.status_code == 200
     assert len(list_comments.json()) == 1
+
+
+@pytest.mark.asyncio
+async def test_task_reorder_updates_status_and_list_order(api_client: AsyncClient) -> None:
+    await _register_user(api_client, "planner@example.com")
+    token = await _login_token(api_client, "planner@example.com")
+    headers = {"Authorization": f"Bearer {token}"}
+
+    ws = await api_client.post("/api/v1/workspaces", json={"name": "Planner WS"}, headers=headers)
+    assert ws.status_code == 201
+    workspace_id = ws.json()["id"]
+
+    project = await api_client.post(
+        f"/api/v1/workspaces/{workspace_id}/projects",
+        json={"name": "Roadmap"},
+        headers=headers,
+    )
+    assert project.status_code == 201
+    project_id = project.json()["id"]
+
+    created = []
+    for title in ["Task A", "Task B", "Task C"]:
+        resp = await api_client.post(
+            f"/api/v1/projects/{project_id}/tasks",
+            json={"title": title},
+            headers=headers,
+        )
+        assert resp.status_code == 201
+        created.append(resp.json())
+
+    task_a = created[0]["id"]
+    task_b = created[1]["id"]
+    task_c = created[2]["id"]
+
+    # Mirror frontend reorder persistence: multiple PATCH updates with status/position pairs.
+    update_a = await api_client.patch(
+        f"/api/v1/tasks/{task_a}",
+        json={"status": "in_progress", "position": 2048},
+        headers=headers,
+    )
+    assert update_a.status_code == 200
+    assert update_a.json()["status"] == "in_progress"
+    assert update_a.json()["position"] == 2048
+
+    update_b = await api_client.patch(
+        f"/api/v1/tasks/{task_b}",
+        json={"position": 0},
+        headers=headers,
+    )
+    assert update_b.status_code == 200
+    assert update_b.json()["position"] == 0
+
+    update_c = await api_client.patch(
+        f"/api/v1/tasks/{task_c}",
+        json={"position": 1024},
+        headers=headers,
+    )
+    assert update_c.status_code == 200
+    assert update_c.json()["position"] == 1024
+
+    listed = await api_client.get(f"/api/v1/projects/{project_id}/tasks", headers=headers)
+    assert listed.status_code == 200
+    payload = listed.json()
+
+    assert [t["id"] for t in payload] == [task_b, task_c, task_a]
+    assert [t["position"] for t in payload] == [0, 1024, 2048]
+    assert next(t for t in payload if t["id"] == task_a)["status"] == "in_progress"
