@@ -110,6 +110,9 @@ Client state: access token in memory (React context); refresh on load via cookie
 | 2026-04-10 | Gap-hardening phase: UI write flows for project/task/comment, project-view WS client integration, and release docs hardening. |
 | 2026-04-11 | Added Kanban DnD pure-logic tests (frontend) and task status/position reorder integration coverage (backend), with CI-parity verification (`test:ci`, lint/build, ruff/pytest). |
 | 2026-04-21 | Deployment hardening: root `Dockerfile` for monorepo CI/compose; `backend/Dockerfile` for Render `backend/` context; optional `CORS_ORIGIN_REGEX` for Vercel previews; runbooks updated for Render/Vercel. |
+| 2026-04-21 | CI path-filter hardening: backend change detection now includes root `Dockerfile` so pull requests still run backend checks (including Docker build validation) when only production image definition changes. |
+| 2026-04-21 | CI permissions hardening: explicitly granted `contents: read` and `pull-requests: read` so `dorny/paths-filter` can list changed files on `pull_request` events without `Resource not accessible by integration` failures. |
+| 2026-04-21 | CI backend release-gate hardening: backend job now builds both root `Dockerfile` (monorepo context) and `backend/Dockerfile` (Render `Root Directory=backend` path) to catch deploy-image regressions before merge. |
 
 ---
 

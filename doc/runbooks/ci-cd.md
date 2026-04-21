@@ -11,7 +11,7 @@
 
 | Workflow | Trigger | Paths (concept) | Jobs |
 |----------|---------|-----------------|------|
-| `ci.yml` | `pull_request`, `push` to `main` | `backend/**`, `frontend/**`, `doc/specs/**`, workflows | Backend: `uv sync`, ruff, `alembic upgrade head`, pytest against Postgres service, `docker build -f Dockerfile .`; Frontend: `npm ci`, `test:ci`, lint, build; Contract: OpenAPI lint + generated type sync check |
+| `ci.yml` | `pull_request`, `push` to `main` | `backend/**`, `frontend/**`, `doc/specs/**`, workflows | Backend: `uv sync`, ruff, `alembic upgrade head`, pytest against Postgres service, `docker build -f Dockerfile .`, `docker build -f backend/Dockerfile backend`; Frontend: `npm ci`, `test:ci`, lint, build; Contract: OpenAPI lint + generated type sync check |
 
 ## Production deploy
 
@@ -22,7 +22,7 @@
 
 Recommended branch protection required checks:
 
-- `backend` (ruff + alembic + pytest + docker build)
+- `backend` (ruff + alembic + pytest + both Docker builds)
 - `frontend` (test:ci + lint + build)
 - `contract` (OpenAPI lint + generated type sync)
 
