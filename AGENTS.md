@@ -128,7 +128,7 @@ Task: {TASK}
 
 Constraints:
 - Path-filter workflows; no secrets in YAML; document secret *names* only.
-- Backend CI: uv sync, ruff, pytest, docker build from repo root with backend/Dockerfile.
+- Backend CI: uv sync, ruff, pytest, `docker build -f Dockerfile .` from repo root.
 - Frontend CI: npm ci, lint, build with NEXT_PUBLIC_API_URL set for build-time env.
 
 Update CONTEXT.md if required checks or deploy assumptions change.

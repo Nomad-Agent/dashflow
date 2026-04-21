@@ -80,7 +80,7 @@ Client state: access token in memory (React context); refresh on load via cookie
 
 ## CI / tooling
 
-- **Backend:** `uv sync`, `ruff`, `alembic upgrade head`, `pytest`, Docker image build (`backend/Dockerfile` from repo root). CI uses ephemeral Postgres service.
+- **Backend:** `uv sync`, `ruff`, `alembic upgrade head`, `pytest`, Docker image build (root [`Dockerfile`](Dockerfile) from repo root; [`backend/Dockerfile`](backend/Dockerfile) for backend-only context e.g. Render). CI uses ephemeral Postgres service.
 - **Frontend:** `npm ci`, `test:ci` (Vitest), `lint`, `build` with `NEXT_PUBLIC_API_URL` set for build.
 - **OpenAPI** `info.version` should move with meaningful contract changes (track here).
 
@@ -109,7 +109,12 @@ Client state: access token in memory (React context); refresh on load via cookie
 | 2026-04-10 | Implemented QA baseline: backend auth/authz integration tests, frontend Vitest baseline, CI test gates with Postgres service and migration step. |
 | 2026-04-10 | Gap-hardening phase: UI write flows for project/task/comment, project-view WS client integration, and release docs hardening. |
 | 2026-04-11 | Added Kanban DnD pure-logic tests (frontend) and task status/position reorder integration coverage (backend), with CI-parity verification (`test:ci`, lint/build, ruff/pytest). |
+| 2026-04-21 | Deployment hardening: root `Dockerfile` for monorepo CI/compose; `backend/Dockerfile` for Render `backend/` context; optional `CORS_ORIGIN_REGEX` for Vercel previews; runbooks updated for Render/Vercel. |
+| 2026-04-21 | CI path-filter hardening: backend change detection now includes root `Dockerfile` so pull requests still run backend checks (including Docker build validation) when only production image definition changes. |
+| 2026-04-21 | CI permissions hardening: explicitly granted `contents: read` and `pull-requests: read` so `dorny/paths-filter` can list changed files on `pull_request` events without `Resource not accessible by integration` failures. |
+| 2026-04-21 | CI backend release-gate hardening: backend job now builds both root `Dockerfile` (monorepo context) and `backend/Dockerfile` (Render `Root Directory=backend` path) to catch deploy-image regressions before merge. |
+| 2026-04-21 | CI stabilization: backend workflow now sets `DATABASE_URL` (alongside `DATABASE_URL_TEST`) to the test Postgres service for Alembic; OpenAPI 3.1 schema nullability updated from `nullable: true` to JSON Schema unions (e.g. `type: [string, \"null\"]`) so Redocly contract lint no longer fails struct validation. |
 
 ---
 
-*Last updated: 2026-04-11 — align this date when you edit materially.*
+*Last updated: 2026-04-21 — align this date when you edit materially.*
