@@ -5,6 +5,10 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+  pull-requests: read
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -24,6 +28,7 @@ jobs:
           filters: |
             backend:
               - 'backend/**'
+              - 'Dockerfile'
             frontend:
               - 'frontend/**'
             specs:
@@ -48,6 +53,7 @@ jobs:
           --health-timeout=5s
           --health-retries=5
     env:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/dashflow_test
       DATABASE_URL_TEST: postgresql+asyncpg://postgres:postgres@localhost:5432/dashflow_test
     steps:
       - uses: actions/checkout@v4
@@ -63,6 +69,8 @@ jobs:
           uv run pytest -q
       - name: Docker build API
         run: docker build -f Dockerfile -t dashflow-api:ci .
+      - name: Docker build API (backend context)
+        run: docker build -f backend/Dockerfile -t dashflow-api-backend:ci backend
 
   frontend:
     needs: changes
