@@ -5,6 +5,10 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+  pull-requests: read
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -64,6 +68,8 @@ jobs:
           uv run pytest -q
       - name: Docker build API
         run: docker build -f Dockerfile -t dashflow-api:ci .
+      - name: Docker build API (backend context)
+        run: docker build -f backend/Dockerfile -t dashflow-api-backend:ci backend
 
   frontend:
     needs: changes
