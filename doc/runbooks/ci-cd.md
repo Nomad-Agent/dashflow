@@ -4,7 +4,7 @@
 
 - **Monorepo path filters** — avoid running heavy jobs when unrelated paths change.
 - **Secrets (names only — values in GitHub):**
-  - `DATABASE_URL_TEST` — optional for local/dev integration checks; CI currently uses ephemeral Postgres service
+  - `DATABASE_URL_TEST` — local/dev integration test target when you run pytest against a dedicated database such as a Neon test branch
   - `RENDER_DEPLOY_HOOK_PRODUCTION` — required only when production deploy is hook-driven from Actions
 
 ## Workflows (intended)
@@ -40,13 +40,13 @@ If you rename jobs in workflow YAML, update branch protection names immediately.
 
 - QA and test scope/runbook: [`testing.md`](testing.md)
 - Local/CI DB usage:
-  - `DATABASE_URL_TEST` can back local integration tests.
-  - CI uses ephemeral Postgres service containers for deterministic DB-backed tests.
+  - Local integration tests require a dedicated `DATABASE_URL_TEST`; the harness rewires `DATABASE_URL` to that value before importing the app.
+  - CI uses an ephemeral Postgres service container and sets both `DATABASE_URL` and `DATABASE_URL_TEST` to that service for parity with the Alembic bootstrap path.
 
 ## Secrets matrix (required vs optional)
 
 | Secret | Where | Required | Purpose |
 |--------|-------|----------|---------|
-| `DATABASE_URL_TEST` | Local shell / optional GitHub env | Optional | Local integration test override; CI currently uses service DB. |
+| `DATABASE_URL_TEST` | Local shell / optional GitHub env | Optional | Dedicated local integration-test database; CI currently injects the service DB directly in workflow env. |
 | `RENDER_DEPLOY_HOOK_PRODUCTION` | GitHub Environment: production | Conditional | Trigger production deploy from Actions after green checks. |
 | `NEXT_PUBLIC_API_URL` | Vercel project env + CI build env | Required | Frontend build/runtime API base URL. |

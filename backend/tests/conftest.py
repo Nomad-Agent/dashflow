@@ -1,6 +1,5 @@
 """Shared pytest fixtures for API integration tests."""
 
-import os
 from collections.abc import AsyncIterator
 
 import pytest
@@ -8,28 +7,34 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy.pool import NullPool
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
 
-from app.core.config import get_settings
-from app.db.session import get_db
-from app.main import app
-from app.models import Base  # noqa: F401 - ensure metadata registered
+from tests.support import (
+    configure_test_database_environment,
+    migrate_test_database,
+    truncate_all_tables,
+)
 
-# Ensure local pytest uses dedicated test DB from .env when present.
-_settings = get_settings()
-if _settings.database_url_test and not os.getenv("DATABASE_URL"):
-    os.environ["DATABASE_URL"] = _settings.database_url_test
-get_settings.cache_clear()
+configure_test_database_environment()
+
+from app.core.config import get_settings  # noqa: E402
+from app.db.session import get_db  # noqa: E402
+from app.main import app  # noqa: E402
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def test_database_url() -> str:
     return get_settings().database_url
 
 
-@pytest.fixture()
-async def db_engine(test_database_url: str) -> AsyncIterator[AsyncEngine]:
+@pytest.fixture(scope="session")
+def migrated_test_database(test_database_url: str) -> str:
+    migrate_test_database(test_database_url)
+    return test_database_url
+
+
+@pytest.fixture(scope="session")
+async def db_engine(migrated_test_database: str) -> AsyncIterator[AsyncEngine]:
+    test_database_url = migrated_test_database
     engine = create_async_engine(test_database_url, echo=False, pool_pre_ping=True, poolclass=NullPool)
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
     try:
         yield engine
     finally:
@@ -42,11 +47,8 @@ async def session_factory(db_engine: AsyncEngine) -> async_sessionmaker[AsyncSes
 
 
 @pytest.fixture()
-async def db_cleanup(session_factory: async_sessionmaker[AsyncSession]) -> AsyncIterator[None]:
-    async with session_factory() as session:
-        for table in reversed(Base.metadata.sorted_tables):
-            await session.execute(table.delete())
-        await session.commit()
+async def db_cleanup(db_engine: AsyncEngine) -> AsyncIterator[None]:
+    await truncate_all_tables(db_engine)
     yield
 
 

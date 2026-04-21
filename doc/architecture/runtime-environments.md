@@ -5,7 +5,8 @@
 | Environment | Store | Connection |
 |-------------|--------|------------|
 | Local dev | **Neon** (dev branch) | `DATABASE_URL` in `backend/.env` (`postgresql+asyncpg://...`) |
-| CI (GitHub Actions) | **Neon** (test branch) | Secret `DATABASE_URL_TEST` |
+| Local integration tests | **Dedicated Postgres-compatible test DB** | `DATABASE_URL_TEST` in `backend/.env` or shell; Neon test branch is acceptable when no local DB is running |
+| CI (GitHub Actions) | **Ephemeral Postgres service** | Workflow sets both `DATABASE_URL` and `DATABASE_URL_TEST` to the service DB before Alembic + pytest |
 | Staging API (Render) | **Render Postgres** (staging) | Render-injected `DATABASE_URL` on **staging** Web Service |
 | Production API (Render) | **Render Postgres** (production) | Render-injected `DATABASE_URL` on **production** Web Service |
 

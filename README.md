@@ -77,7 +77,7 @@ npm run dev
 |----------|-----|
 | `DATABASE_URL` | Used on Render / single-URL setups; wins if set. |
 | `DATABASE_URL_DEV` | Local dev when `DATABASE_URL` is unset. |
-| `DATABASE_URL_TEST` | **CI / pytest** when tests need a DB (see `backend/tests/conftest.py`; optional GitHub secret). |
+| `DATABASE_URL_TEST` | Dedicated local pytest database. Integration tests require it locally and point `DATABASE_URL` at it during test startup. Neon is fine if you do not have a local Postgres instance running. |
 
 Production DB on Render is injected as `DATABASE_URL` when you deploy—no need for a local prod URL.
 
@@ -109,7 +109,7 @@ Frontend is **not** run in Docker for production (Vercel builds from Git). Detai
 
 ## CI
 
-GitHub Actions: [`.github/workflows/ci.yml`](.github/workflows/ci.yml) (path-filtered). Secret **`DATABASE_URL_TEST`** for DB-backed tests when you add them.
+GitHub Actions: [`.github/workflows/ci.yml`](.github/workflows/ci.yml) (path-filtered). The backend job provisions an ephemeral Postgres service and sets both `DATABASE_URL` and `DATABASE_URL_TEST` to that service before running `alembic upgrade head` and `pytest -q`.
 
 ## Version control
 
