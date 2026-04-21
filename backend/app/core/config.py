@@ -54,6 +54,11 @@ class Settings(BaseSettings):
     refresh_token_expire_days: int = 30
     refresh_cookie_name: str = "dashflow_refresh"
     cors_origins: str = "http://localhost:3000,http://localhost:3002"
+    # Optional: Starlette regex for preview hosts (e.g. all Vercel preview URLs).
+    cors_origin_regex: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("CORS_ORIGIN_REGEX"),
+    )
     # Cross-site SPA (Vercel → API): SameSite=None; Secure required
     refresh_cookie_secure: bool = False
     refresh_cookie_samesite: str = "lax"

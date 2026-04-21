@@ -21,8 +21,8 @@
 
 | Vercel target | `NEXT_PUBLIC_API_URL` |
 |---------------|------------------------|
-| **Production** | Production Render API base …`/api/v1` |
-| **Preview** (PRs) | Staging Render API base …`/api/v1` |
+| **Production** | Production Render API base …`/api/v1` (current staging-style API example: `https://dashflow-vkvj.onrender.com/api/v1`) |
+| **Preview** (PRs) | Same or separate Render API base …`/api/v1` |
 
 ## CORS (Render API)
 

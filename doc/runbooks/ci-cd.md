@@ -11,11 +11,11 @@
 
 | Workflow | Trigger | Paths (concept) | Jobs |
 |----------|---------|-----------------|------|
-| `ci.yml` | `pull_request`, `push` to `main` | `backend/**`, `frontend/**`, `doc/specs/**`, workflows | Backend: `uv sync`, ruff, `alembic upgrade head`, pytest against Postgres service, `docker build`; Frontend: `npm ci`, `test:ci`, lint, build; Contract: OpenAPI lint + generated type sync check |
+| `ci.yml` | `pull_request`, `push` to `main` | `backend/**`, `frontend/**`, `doc/specs/**`, workflows | Backend: `uv sync`, ruff, `alembic upgrade head`, pytest against Postgres service, `docker build -f Dockerfile .`; Frontend: `npm ci`, `test:ci`, lint, build; Contract: OpenAPI lint + generated type sync check |
 
 ## Production deploy
 
-- **Render production:** workflow job `curl -fsS -X POST "$RENDER_DEPLOY_HOOK_PRODUCTION"` after tests pass on `main`.
+- **Render production:** you can promote via **Render dashboard**, **deploy hook** (manual `curl` or CI), or **Git integration** auto-deploy—pick one model per service. This repo’s `.github/workflows/ci.yml` **does not** POST a deploy hook yet; if you want hook-driven production, add a small workflow (or run the `curl` from your release process) and store `RENDER_DEPLOY_HOOK_PRODUCTION` in GitHub Environments.
 - **Vercel:** usually automatic via Vercel Git integration (no duplicate deploy from Actions unless desired).
 
 ## Required checks on `main`

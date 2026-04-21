@@ -4,8 +4,10 @@
 
 1. Create **staging** Web Service + **staging** PostgreSQL; link DB; set `CORS_ORIGINS`, `JWT_SECRET_KEY`, etc.
 2. Create **production** Web Service + **production** PostgreSQL; same env pattern; **disable auto-deploy** for production if using hook-only workflow.
-3. **Dockerfile path:** `backend/Dockerfile`, root directory = repo root.
-4. **Release command:** `cd /app && alembic upgrade head` (adjust to image `WORKDIR` — confirm in Render shell docs).
+3. **Docker (monorepo):** choose **one** layout:
+   - **A (recommended):** Root Directory = **empty** (repo root), Dockerfile Path = **`Dockerfile`**, Docker Build Context = **`.`** (uses root [`Dockerfile`](../../Dockerfile)).
+   - **B (Render “Root Directory = backend”):** Root Directory = **`backend`**, Dockerfile Path = **`Dockerfile`**, Docker Build Context = **`.`** (uses [`backend/Dockerfile`](../../backend/Dockerfile) with context `backend/`).
+4. **Release command:** `alembic upgrade head` (image `WORKDIR` is `/app`, same as repo `backend/` contents; no `cd` needed).
 
 ## Staging vs production triggers
 

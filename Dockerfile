@@ -1,6 +1,6 @@
-# Build with Docker context = this directory (backend/), e.g. Render "Root Directory" = backend.
-# For monorepo builds from repo root use /Dockerfile instead:
+# Build from repository root:
 #   docker build -f Dockerfile .
+# Used by CI, docker-compose, and Render when Root Directory is empty.
 FROM python:3.12-slim AS base
 
 RUN useradd --create-home --uid 1000 appuser
@@ -13,11 +13,11 @@ ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
     PATH="/app/.venv/bin:$PATH"
 
-COPY pyproject.toml uv.lock ./
+COPY backend/pyproject.toml backend/uv.lock ./
 
 RUN uv sync --frozen --no-dev
 
-COPY . ./
+COPY backend/ ./
 
 USER appuser
 
