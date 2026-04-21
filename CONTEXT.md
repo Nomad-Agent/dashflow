@@ -48,7 +48,7 @@ DashFlow is a **team task workspace**: users join **workspaces**, organize work 
 - **Access token:** JWT Bearer (`Authorization: Bearer …`), short-lived; payload includes `typ: access`.
 - **Refresh token:** JWT in **httpOnly** cookie, path `/api/v1/auth`; `POST /auth/refresh` returns new access token; `POST /auth/logout` clears cookie.
 - **CORS:** Configurable via settings; credentials enabled for cookie auth.
-- **DB URL:** `DATABASE_URL` **or** `DATABASE_URL_DEV`; plain `postgresql://` URLs are normalized to **`postgresql+asyncpg://`** for the async engine. Tests may use `DATABASE_URL_TEST` via `backend/tests/conftest.py`.
+- **DB URL:** `DATABASE_URL` **or** `DATABASE_URL_DEV`; plain `postgresql://` URLs are normalized to **`postgresql+asyncpg://`** for the async engine. Backend integration tests now require a dedicated `DATABASE_URL_TEST` locally, bootstrap schema via Alembic once per pytest session, and then clean data between tests.
 - **WebSocket:** `GET /api/v1/ws?token=<access_jwt>`; must validate `typ: access`.
 
 ---
@@ -114,6 +114,7 @@ Client state: access token in memory (React context); refresh on load via cookie
 | 2026-04-21 | CI permissions hardening: explicitly granted `contents: read` and `pull-requests: read` so `dorny/paths-filter` can list changed files on `pull_request` events without `Resource not accessible by integration` failures. |
 | 2026-04-21 | CI backend release-gate hardening: backend job now builds both root `Dockerfile` (monorepo context) and `backend/Dockerfile` (Render `Root Directory=backend` path) to catch deploy-image regressions before merge. |
 | 2026-04-21 | CI stabilization: backend workflow now sets `DATABASE_URL` (alongside `DATABASE_URL_TEST`) to the test Postgres service for Alembic; OpenAPI 3.1 schema nullability updated from `nullable: true` to JSON Schema unions (e.g. `type: [string, \"null\"]`) so Redocly contract lint no longer fails struct validation. |
+| 2026-04-21 | Backend test harness schema strategy unified: local and CI integration tests now bootstrap with Alembic instead of `Base.metadata.create_all`, local pytest requires a dedicated `DATABASE_URL_TEST`, and test runs clear data between tests without rebuilding schema. |
 
 ---
 

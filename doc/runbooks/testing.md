@@ -38,12 +38,14 @@ npm run check:types-generated
 
 ## Database strategy for tests
 
-DashFlow uses a hybrid strategy:
+DashFlow backend integration tests now use one schema strategy in both local runs and CI:
 
-- **Local integration tests:** can use Neon test branch via `DATABASE_URL_TEST`.
-- **CI integration tests:** run against ephemeral Postgres service container in GitHub Actions.
+- pytest requires a dedicated `DATABASE_URL_TEST` locally and fails fast if it is missing or matches `DATABASE_URL`.
+- the test harness points `DATABASE_URL` at that safe test target before importing the app.
+- Alembic runs once at pytest session startup, so local runs exercise the same migration path CI already uses.
+- each test clears application tables after the migrated schema is in place, keeping data isolated without rebuilding the schema every time.
 
-`backend/tests/conftest.py` maps `DATABASE_URL_TEST` to `DATABASE_URL` when needed.
+CI still uses an ephemeral Postgres service container, with both `DATABASE_URL` and `DATABASE_URL_TEST` set to that test database for parity.
 
 ## Priority test matrix (implemented baseline)
 
@@ -61,7 +63,7 @@ DashFlow uses a hybrid strategy:
 - Test jobs should be required checks on `main`.
 - Any failing test blocks deployment workflows.
 - Generated frontend types must remain in sync with OpenAPI.
-- Backend CI runs Alembic migrations before pytest to catch schema/migration issues early.
+- Backend CI and local pytest both depend on Alembic succeeding before tests execute, so schema drift now fails immediately in either environment.
 
 See [`ci-cd.md`](ci-cd.md) for workflow-level details.
 
