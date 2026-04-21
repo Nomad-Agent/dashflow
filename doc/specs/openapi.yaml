@@ -460,9 +460,8 @@ components:
           type: string
           maxLength: 255
         slug:
-          type: string
+          type: [string, "null"]
           maxLength: 255
-          nullable: true
     WorkspaceRead:
       type: object
       required: [id, name, slug, created_at, updated_at]
@@ -487,11 +486,9 @@ components:
         name:
           type: string
         description:
-          type: string
-          nullable: true
+          type: [string, "null"]
         color:
-          type: string
-          nullable: true
+          type: [string, "null"]
         sort_order:
           type: integer
           default: 0
@@ -501,11 +498,9 @@ components:
         name:
           type: string
         description:
-          type: string
-          nullable: true
+          type: [string, "null"]
         color:
-          type: string
-          nullable: true
+          type: [string, "null"]
         sort_order:
           type: integer
     ProjectRead:
@@ -521,11 +516,9 @@ components:
         name:
           type: string
         description:
-          type: string
-          nullable: true
+          type: [string, "null"]
         color:
-          type: string
-          nullable: true
+          type: [string, "null"]
         sort_order:
           type: integer
         created_at:
@@ -558,24 +551,20 @@ components:
         title:
           type: string
         description:
-          type: string
-          nullable: true
+          type: [string, "null"]
         status:
           $ref: "#/components/schemas/TaskStatus"
         priority:
           $ref: "#/components/schemas/TaskPriority"
         due_date:
-          type: string
+          type: [string, "null"]
           format: date
-          nullable: true
         start_date:
-          type: string
+          type: [string, "null"]
           format: date
-          nullable: true
         assignee_id:
-          type: string
+          type: [string, "null"]
           format: uuid
-          nullable: true
         position:
           type: integer
           default: 0
@@ -585,24 +574,20 @@ components:
         title:
           type: string
         description:
-          type: string
-          nullable: true
+          type: [string, "null"]
         status:
           $ref: "#/components/schemas/TaskStatus"
         priority:
           $ref: "#/components/schemas/TaskPriority"
         due_date:
-          type: string
+          type: [string, "null"]
           format: date
-          nullable: true
         start_date:
-          type: string
+          type: [string, "null"]
           format: date
-          nullable: true
         assignee_id:
-          type: string
+          type: [string, "null"]
           format: uuid
-          nullable: true
         position:
           type: integer
     TaskRead:
@@ -626,28 +611,23 @@ components:
         title:
           type: string
         description:
-          type: string
-          nullable: true
+          type: [string, "null"]
         status:
           type: string
         priority:
           type: string
         due_date:
-          type: string
+          type: [string, "null"]
           format: date
-          nullable: true
         start_date:
-          type: string
+          type: [string, "null"]
           format: date
-          nullable: true
         assignee_id:
-          type: string
+          type: [string, "null"]
           format: uuid
-          nullable: true
         created_by_id:
-          type: string
+          type: [string, "null"]
           format: uuid
-          nullable: true
         position:
           type: integer
         created_at:
