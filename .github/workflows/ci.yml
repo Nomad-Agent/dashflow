@@ -24,6 +24,7 @@ jobs:
           filters: |
             backend:
               - 'backend/**'
+              - 'Dockerfile'
             frontend:
               - 'frontend/**'
             specs:
