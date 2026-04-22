@@ -18,7 +18,10 @@ Store hook URLs in GitHub **environment** secrets (e.g. `RENDER_DEPLOY_HOOK_PROD
 
 ## Vercel
 
-- Connect Git repo; set **Production** and **Preview** `NEXT_PUBLIC_API_URL` per `runtime-environments.md`.
+- Import the Git repo as a **monorepo** project and set **Root Directory = `frontend`** before the first deploy.
+- Set **Framework Preset = Next.js**.
+- Leave **Output Directory** empty unless you have a deliberate non-Next static export setup. If Vercel is looking for `public`, the project was imported with the wrong framework/root settings.
+- Set **Production** and **Preview** `NEXT_PUBLIC_API_URL` per `runtime-environments.md`.
 
 ## First-time checklist
 

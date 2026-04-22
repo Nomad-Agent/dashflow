@@ -96,6 +96,12 @@ docker compose up --build api
 
 Frontend is **not** run in Docker for production (Vercel builds from Git). Details: [`doc/architecture/containers.md`](doc/architecture/containers.md).
 
+### Vercel import note
+
+- When importing this repo into Vercel, set **Root Directory = `frontend`**.
+- The Vercel project should use the **Next.js** framework preset.
+- Leave **Output Directory** blank for the Next.js build. If Vercel asks for `public`, it is building the repo root as a generic static app instead of the `frontend/` app.
+
 ## Documentation index
 
 | Doc | Purpose |
