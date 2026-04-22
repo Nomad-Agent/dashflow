@@ -96,6 +96,12 @@ docker compose up --build api
 
 Frontend is **not** run in Docker for production (Vercel builds from Git). Details: [`doc/architecture/containers.md`](doc/architecture/containers.md).
 
+### Render deploy note
+
+- Sync [`render.yaml`](render.yaml) to manage the API service as Render infrastructure-as-code.
+- The Blueprint uses a **pre-deploy** migration command: `alembic upgrade head`.
+- Render should health-check the API at **`/api/v1/ready`** so missing or stale schema blocks a bad deploy before it serves traffic.
+
 ### Vercel import note
 
 - When importing this repo into Vercel, set **Root Directory = `frontend`**.

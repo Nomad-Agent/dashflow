@@ -16,7 +16,7 @@ def create_app() -> FastAPI:
     settings = get_settings()
     app = FastAPI(
         title="DashFlow API",
-        version="0.1.0",
+        version="0.3.0",
         lifespan=lifespan,
         docs_url="/api/v1/docs",
         redoc_url="/api/v1/redoc",

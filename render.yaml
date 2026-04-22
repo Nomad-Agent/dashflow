@@ -1,0 +1,12 @@
+# If your existing Render API service uses a different name, update `name`
+# before the first Blueprint sync so Render updates that service instead of
+# creating a second one.
+services:
+  - type: web
+    name: dashflow-api
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: Dockerfile
+    dockerContext: .
+    preDeployCommand: alembic upgrade head
+    healthCheckPath: /api/v1/ready

@@ -7,7 +7,8 @@
 3. **Docker (monorepo):** choose **one** layout:
    - **A (recommended):** Root Directory = **empty** (repo root), Dockerfile Path = **`Dockerfile`**, Docker Build Context = **`.`** (uses root [`Dockerfile`](../../Dockerfile)).
    - **B (Render “Root Directory = backend”):** Root Directory = **`backend`**, Dockerfile Path = **`Dockerfile`**, Docker Build Context = **`.`** (uses [`backend/Dockerfile`](../../backend/Dockerfile) with context `backend/`).
-4. **Release command:** `alembic upgrade head` (image `WORKDIR` is `/app`, same as repo `backend/` contents; no `cd` needed).
+4. **Automate migrations:** use a Blueprint-backed **pre-deploy command** of `alembic upgrade head` so every Render deploy upgrades schema before traffic shifts.
+5. Keep the web service health check pointed at **`/api/v1/ready`** so deploys fail fast if the database schema is missing or behind.
 
 ## Staging vs production triggers
 
@@ -27,6 +28,7 @@ Store hook URLs in GitHub **environment** secrets (e.g. `RENDER_DEPLOY_HOOK_PROD
 
 - [ ] Neon branches for dev + test CI
 - [ ] Render staging + prod services and DBs
+- [ ] Render Blueprint synced from [`render.yaml`](../../render.yaml)
 - [ ] Vercel env vars
 - [ ] GitHub secrets for CI + deploy hook
 - [ ] Run migrations on each new environment
