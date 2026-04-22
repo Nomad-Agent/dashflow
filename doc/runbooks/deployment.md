@@ -8,7 +8,8 @@
    - **A (recommended):** Root Directory = **empty** (repo root), Dockerfile Path = **`Dockerfile`**, Docker Build Context = **`.`** (uses root [`Dockerfile`](../../Dockerfile)).
    - **B (Render “Root Directory = backend”):** Root Directory = **`backend`**, Dockerfile Path = **`Dockerfile`**, Docker Build Context = **`.`** (uses [`backend/Dockerfile`](../../backend/Dockerfile) with context `backend/`).
 4. **Automate migrations:** use a Blueprint-backed **pre-deploy command** of `alembic upgrade head` so every Render deploy upgrades schema before traffic shifts.
-5. Keep the web service health check pointed at **`/api/v1/ready`** so deploys fail fast if the database schema is missing or behind.
+5. **Free-tier fallback:** the API container startup also runs `alembic upgrade head && uvicorn ...` because Render does not execute pre-deploy commands on free instances.
+6. Keep the web service health check pointed at **`/api/v1/ready`** so deploys fail fast if the database schema is missing or behind.
 
 ## Staging vs production triggers
 
