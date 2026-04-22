@@ -14,7 +14,7 @@
 
 | Surface | Host | Deploy |
 |---------|------|--------|
-| Frontend | **Vercel** | Git-connected build (not Docker) |
+| Frontend | **Vercel** | Git-connected build from **`frontend/`** root directory (not Docker) |
 | API staging | **Render** | Auto-deploy on **`main`** (Dockerfile) |
 | API production | **Render** | **Deploy hook** after CI on `main` (no auto-deploy on push) |
 

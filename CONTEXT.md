@@ -115,6 +115,7 @@ Client state: access token in memory (React context); refresh on load via cookie
 | 2026-04-21 | CI backend release-gate hardening: backend job now builds both root `Dockerfile` (monorepo context) and `backend/Dockerfile` (Render `Root Directory=backend` path) to catch deploy-image regressions before merge. |
 | 2026-04-21 | CI stabilization: backend workflow now sets `DATABASE_URL` (alongside `DATABASE_URL_TEST`) to the test Postgres service for Alembic; OpenAPI 3.1 schema nullability updated from `nullable: true` to JSON Schema unions (e.g. `type: [string, \"null\"]`) so Redocly contract lint no longer fails struct validation. |
 | 2026-04-21 | Backend test harness schema strategy unified: local and CI integration tests now bootstrap with Alembic instead of `Base.metadata.create_all`, local pytest requires a dedicated `DATABASE_URL_TEST`, and test runs clear data between tests without rebuilding schema. |
+| 2026-04-21 | Deployment docs clarified that the Vercel project must import this monorepo with **Root Directory = `frontend`** and **Framework Preset = Next.js**; otherwise Vercel may treat the repo root as a static site and fail looking for a `public` output directory. |
 
 ---
 
