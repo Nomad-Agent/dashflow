@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: DashFlow API
-  version: 0.2.0
+  version: 0.3.0
   description: |
     REST contract for DashFlow MVP — workspaces, projects, tasks, comments, JWT access + httpOnly refresh cookie.
 servers:
@@ -27,6 +27,37 @@ paths:
                   status:
                     type: string
                     example: ok
+  /ready:
+    get:
+      summary: Database readiness check
+      operationId: readinessCheck
+      security: []
+      responses:
+        "200":
+          description: API and database schema are ready
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, database]
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  database:
+                    type: string
+                    example: ok
+        "503":
+          description: Database schema is unavailable or out of date
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [detail]
+                properties:
+                  detail:
+                    type: string
+                    example: Database not ready
   /auth/register:
     post:
       summary: Register

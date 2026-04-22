@@ -50,6 +50,7 @@ DashFlow is a **team task workspace**: users join **workspaces**, organize work 
 - **CORS:** Configurable via settings; credentials enabled for cookie auth.
 - **DB URL:** `DATABASE_URL` **or** `DATABASE_URL_DEV`; plain `postgresql://` URLs are normalized to **`postgresql+asyncpg://`** for the async engine. Backend integration tests now require a dedicated `DATABASE_URL_TEST` locally, bootstrap schema via Alembic once per pytest session, and then clean data between tests.
 - **WebSocket:** `GET /api/v1/ws?token=<access_jwt>`; must validate `typ: access`.
+- **Readiness probe:** `GET /api/v1/ready` verifies that the connected database is at the current Alembic head before deploy traffic should shift.
 
 ---
 
@@ -84,7 +85,7 @@ Client state: access token in memory (React context); refresh on load via cookie
 - **Frontend:** `npm ci`, `test:ci` (Vitest), `lint`, `build` with `NEXT_PUBLIC_API_URL` set for build.
 - **OpenAPI** `info.version` should move with meaningful contract changes (track here).
 
-**OpenAPI spec version (doc):** `0.2.0` (last known sync with implemented REST surface).
+**OpenAPI spec version (doc):** `0.3.0` (includes readiness endpoint for schema-aware deploy checks).
 
 ---
 
@@ -116,6 +117,7 @@ Client state: access token in memory (React context); refresh on load via cookie
 | 2026-04-21 | CI stabilization: backend workflow now sets `DATABASE_URL` (alongside `DATABASE_URL_TEST`) to the test Postgres service for Alembic; OpenAPI 3.1 schema nullability updated from `nullable: true` to JSON Schema unions (e.g. `type: [string, \"null\"]`) so Redocly contract lint no longer fails struct validation. |
 | 2026-04-21 | Backend test harness schema strategy unified: local and CI integration tests now bootstrap with Alembic instead of `Base.metadata.create_all`, local pytest requires a dedicated `DATABASE_URL_TEST`, and test runs clear data between tests without rebuilding schema. |
 | 2026-04-21 | Deployment docs clarified that the Vercel project must import this monorepo with **Root Directory = `frontend`** and **Framework Preset = Next.js**; otherwise Vercel may treat the repo root as a static site and fail looking for a `public` output directory. |
+| 2026-04-21 | Render deployment hardening: added Blueprint-managed `render.yaml` with Docker monorepo settings, automated Alembic `preDeployCommand`, and a schema-aware `/api/v1/ready` endpoint so Render health checks fail before serving traffic when migrations are missing. |
 
 ---
 

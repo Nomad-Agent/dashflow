@@ -23,7 +23,8 @@
 
 ## Migrations on Render
 
-- Use **release** or **pre-deploy** command: e.g. `alembic upgrade head` (run inside image context with `DATABASE_URL`).
+- Use a Render **pre-deploy** command: `alembic upgrade head` (run inside image context with `DATABASE_URL`).
+- The repository Blueprint in [`render.yaml`](../../render.yaml) codifies this so schema changes are applied automatically on deploy.
 
 ## WebSockets
 
