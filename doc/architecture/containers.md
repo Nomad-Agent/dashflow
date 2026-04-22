@@ -9,7 +9,7 @@
 
 - **Monorepo build:** root [`Dockerfile`](../Dockerfile) — **build context = repository root** (`docker build -f Dockerfile .`). Used by CI and `docker-compose.yml`.
 - **Backend-only context:** [`backend/Dockerfile`](../backend/Dockerfile) — use when the Docker build context is the `backend/` folder (e.g. Render **Root Directory** = `backend`).
-- **Command:** `uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}` (Render sets `PORT`).
+- **Command:** `alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}` (Render sets `PORT`).
 - **Health:** `GET /api/v1/health` — Docker `HEALTHCHECK` uses this.
 
 ## Local Compose
@@ -25,6 +25,7 @@
 
 - Use a Render **pre-deploy** command: `alembic upgrade head` (run inside image context with `DATABASE_URL`).
 - The repository Blueprint in [`render.yaml`](../../render.yaml) codifies this so schema changes are applied automatically on deploy.
+- Free-tier Render instances skip pre-deploy commands, so the container startup path also runs Alembic before booting the API process.
 
 ## WebSockets
 
