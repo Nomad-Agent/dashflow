@@ -49,6 +49,15 @@ paths:
                     example: ok
         "503":
           description: Database schema is unavailable or out of date
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [detail]
+                properties:
+                  detail:
+                    type: string
+                    example: Database not ready
   /auth/register:
     post:
       summary: Register
