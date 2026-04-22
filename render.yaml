@@ -3,7 +3,7 @@
 # creating a second one.
 services:
   - type: web
-    name: dashflow-api
+    name: dashflow
     runtime: docker
     rootDir: backend
     dockerfilePath: Dockerfile
